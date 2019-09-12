@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zzpage.visitant.map.VisitantMapper">
+    <resultMap type="Visitant" id="visitantMap">
+        <result property="visitant_id" column="visitant_id" />
+        <result property="hash" column="hash" />
+        <result property="user_agent" column="user_agent" />
+        <result property="browser" column="browser" />
+        <result property="browser_version" column="browser_version" />
+        <result property="engine" column="engine" />
+        <result property="engine_version" column="engine_version" />
+        <result property="os" column="os" />
+        <result property="os_version" column="os_version" />
+        <result property="device_vendor" column="device_vendor" />
+        <result property="device_model" column="device_model" />
+        <result property="device_type" column="device_type" />
+        <result property="language" column="language" />
+        <result property="timezone" column="timezone" />
+        <result property="timezone_offset" column="timezone_offset" />
+        <result property="platform" column="platform" />
+        <result property="screen_resolution_x" column="screen_resolution_x" />
+        <result property="screen_resolution_y" column="screen_resolution_y" />
+        <result property="webgl_vendor_and_renderer" column="webgl_vendor_and_renderer" />
+        <result property="remote_addr_hash" column="remote_addr_hash" />
+    </resultMap>
+
+    <resultMap type="VisitantLogAction" id="vstLogActionMap">
+        <result property="action_id" column="action_id" />
+        <result property="content" column="content" />
+        <result property="hash" column="hash" />
+        <result property="type" column="type" />
+    </resultMap>
+
+    <resultMap type="VisitantLogVisit" id="vstLogVisitMap">
+        <result property="visit_id" column="visit_id" />
+        <result property="visitant_id" column="visitant_id" />
+        <result property="visit_date" column="visit_date" />
+    </resultMap>
+
+    <resultMap type="VisitantLogView" id="vstLogViewMap">
+        <result property="view_id" column="view_id" />
+        <result property="visit_id" column="visit_id" />
+        <result property="title_action_id" column="title_action_id" />
+        <result property="url_action_id" column="url_action_id" />
+        <result property="server_time" column="server_time" />
+        <result property="local_time" column="local_time" />
+    </resultMap>
+
+    <insert id="insert" parameterType="Visitant">
+        insert `vst_visitant`
+        set `hash` = #{ hash },
+        `user_agent` = #{ user_agent },
+        `browser` = #{ browser },
+        `browser_version` = #{ browser_version },
+        `engine` = #{ engine },
+        `engine_version` = #{ engine_version },
+        `os` = #{ os },
+        `os_version` = #{ os_version },
+        `device_vendor` = #{ device_vendor },
+        `device_model` = #{ device_model },
+        `device_type` = #{ device_type },
+        `language` = #{ language },
+        `timezone` = #{ timezone },
+        `timezone_offset` = #{ timezone_offset },
+        `platform` = #{ platform },
+        `screen_resolution_x` = #{ screen_resolution_x },
+        `screen_resolution_y` = #{ screen_resolution_y },
+        `webgl_vendor_and_renderer` = #{ webgl_vendor_and_renderer },
+        `remote_addr_hash` = #{ remote_addr_hash };
+        <selectKey keyProperty="visitant_id" resultType="int" order="AFTER">
+            select last_insert_id();
+        </selectKey>
+    </insert>
+
+    <select id="getByHash" resultType="Visitant" parameterType="Visitant">
+        select *
+        from `vst_visitant`
+        where `hash` = #{ hash } and `remote_addr_hash` = #{ remote_addr_hash }
+        limit 1;
+    </select>
+
+    <insert id="insertLogAction" parameterType="VisitantLogAction">
+        insert `vst_log_action`
+        set `content` = #{ content },
+        `hash` = #{ hash },
+        `type` = #{ type };
+        <selectKey keyProperty="action_id" resultType="int" order="AFTER">
+            select last_insert_id();
+        </selectKey>
+    </insert>
+
+    <select id="getLogAction" resultType="VisitantLogAction" parameterType="VisitantLogAction">
+        select *
+        from `vst_log_action`
+        where `hash` = #{ hash } and `type` = #{ type }
+        limit 1;
+    </select>
+
+    <insert id="insertLogVisit" parameterType="VisitantLogVisit">
+        insert `vst_log_visit`
+        set `visitant_id` = #{ visitant_id },
+        `visit_date` = #{ visit_date };
+        <selectKey keyProperty="visit_id" resultType="int" order="AFTER">
+            select last_insert_id();
+        </selectKey>
+    </insert>
+
+    <select id="getLogVisitOneday" resultType="VisitantLogVisit" parameterType="VisitantLogVisit">
+        select *
+        from `vst_log_visit`
+        where `visitant_id` = #{ visitant_id } and `visit_date` = #{ visit_date }
+        limit 1;
+    </select>
+
+    <insert id="insertLogView" parameterType="VisitantLogView">
+        insert `vst_log_view`
+        set `visit_id` = #{ visit_id },
+        `title_action_id` = #{ title_action_id },
+        `url_action_id` = #{ url_action_id },
+        `server_time` = #{ server_time },
+        `local_time` = #{ local_time };
+        <selectKey keyProperty="view_id" resultType="int" order="AFTER">
+            select last_insert_id();
+        </selectKey>
+    </insert>
+
+    <select id="getIsTrackedLogView" resultType="int">
+        select count(*) as cnt
+        from `vst_log_view`
+        where
+            `visit_id` = #{ visit_id }
+          and `url_action_id` = #{ url_action_id }
+			<![CDATA[
+          and `server_time` > #{ server_time }
+			]]>
+		limit 1;
+    </select>
+
+</mapper>

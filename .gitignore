@@ -1,0 +1,10 @@
+WEB-INF/*
+target/*
+out/*
+.settings/*
+.idea/*
+.classpath
+.project
+.springBeans
+*.iml
+database.properties
