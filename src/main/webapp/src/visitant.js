@@ -1,5 +1,5 @@
-/* Visitant.js v0.1.0
-*  Visitant.js is Java Spring Framework based analystic program for tracks website traffic by it install on own server.
+/* Visitant v0.1.0
+*  Visitant is Java Spring Framework based analystic program for tracks website traffic by it install on own server.
 *  Copyright @ 2019. Jangho Bae<khanorder@gmail.com>. All rights reserved.
 *  used opensource - jQuery v3.2.1 (https://jquery.com/)
 *                  - Fingerprintjs2 2.1.0 (https://github.com/Valve/fingerprintjs2)
