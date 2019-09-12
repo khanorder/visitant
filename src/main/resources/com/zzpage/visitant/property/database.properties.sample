@@ -1,4 +1,4 @@
 # put on your database information
-#db.url =jdbc:log4jdbc:mysql://127.0.0.1:3306/visitant
+#db.url =jdbc:mysql://127.0.0.1:3306/visitant
 #db.username =
 #db.password =
