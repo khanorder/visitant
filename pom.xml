@@ -11,7 +11,7 @@
     <name>visitant</name>
 
     <properties>
-        <spring.maven.artifact.version>4.3.25.RELEASE</spring.maven.artifact.version>
+        <spring.maven.artifact.version>5.3.18</spring.maven.artifact.version>
         <jackson.version>2.9.9</jackson.version>
         <log4j.version>2.12.1</log4j.version>
     </properties>
